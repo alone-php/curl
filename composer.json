@@ -1,0 +1,19 @@
+{
+  "name":"alone-php/curl",
+  "type":"library",
+  "license":"MIT",
+  "version":"1.0.0",
+  "description":"原生curl",
+  "require":{
+    "php":">=8.0",
+    "ext-curl":"*"
+  },
+  "autoload":{
+    "psr-4":{
+      "AlonePhp\\Curl\\":"src"
+    },
+    "files":[
+      "function.php"
+    ]
+  }
+}
