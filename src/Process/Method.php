@@ -2,6 +2,7 @@
 
 namespace AlonePhp\Curl\Process;
 
+use Closure;
 use CURLFile;
 
 class Method {
@@ -47,6 +48,8 @@ class Method {
         'query_encode'  => false,
         //设置头部信息
         'header'        => [],
+        //进度条
+        'progress'      => null,
         //自定请求内容,优先级1
         'text'          => '',
         //请求体array,优先级2
@@ -88,6 +91,7 @@ class Method {
         //自定义Curl设置
         'curl'          => []
     ];
+
 
     /**
      * 获取url详细/修改url中的get参数
@@ -146,10 +150,11 @@ class Method {
 
     /**
      * 设置Curl
-     * @param array $config
+     * @param array      $config
+     * @param string|int $uuid
      * @return array
      */
-    public static function setCurl(array $config): array {
+    public static function setCurl(array $config, string|int $uuid = 0): array {
         $config = array_merge(static::$config, $config);
         $conf = function($key, $default = '') use ($config) {
             return ($config[$key] ?? $default) ?: $default;
@@ -312,6 +317,11 @@ class Method {
                     $curl[] = [CURLOPT_PROXYAUTH => ($auth == 'basic' ? CURLAUTH_BASIC : ($auth == 'ntlm' ? CURLAUTH_NTLM : $auth))];
                 }
             }
+        }
+        //设置回调
+        if (!empty($progress = $conf('progress')) && !empty($loading = Loading::setProgress($uuid, $progress))) {
+            $curl[] = [CURLOPT_NOPROGRESS => false];
+            $curl[] = [CURLOPT_PROGRESSFUNCTION => $loading];
         }
         //自定设置
         if (!empty($curls = $conf('curl'))) {

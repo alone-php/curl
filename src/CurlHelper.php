@@ -292,6 +292,16 @@ class CurlHelper {
     }
 
     /**
+     * 进度条
+     * @param callable $progress
+     * @return $this
+     */
+    public function progress(callable $progress): static {
+        $this->config['progress'] = $progress;
+        return $this;
+    }
+
+    /**
      * 是否检查证书,默认不检查
      * @param bool $ssl_peer
      * @return $this

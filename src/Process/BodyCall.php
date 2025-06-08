@@ -18,6 +18,9 @@ class BodyCall {
     //请求信息
     protected array $request = [];
 
+    //CURL信息
+    protected array $curl = [];
+
     //响应时间
     protected int|float $time = 0;
 
@@ -85,6 +88,14 @@ class BodyCall {
      */
     public function getRequest(): array {
         return $this->request;
+    }
+
+    /**
+     * CURL信息
+     * @return array
+     */
+    public function getCurl(): array {
+        return $this->curl;
     }
 
     /**

@@ -17,7 +17,7 @@ class CurlRequest {
         $init = curl_multi_init();
         $config = isset($config['url']) ? [$config] : $config;
         foreach ($config as $key => $val) {
-            $value = Method::setCurl($val);
+            $value = Method::setCurl($val, $key);
             $curl[$key]['status'] = true;
             $curl[$key]['time'] = microtime(true);
             $curl[$key]['request'] = $value['request'] ?? [];
@@ -39,6 +39,7 @@ class CurlRequest {
         foreach ($curl as $key => $v) {
             $res[$key]['status'] = true;
             $res[$key]['request'] = $v['request'];
+            $res[$key]['curl'] = $v['curl'];
             $res[$key]['info'] = curl_getinfo($v['conn']);
             $res[$key]['code'] = $res[$key]['info']['http_code'] ?? 0;
             $size = $res[$key]['info']['header_size'] ?? 0;
@@ -69,6 +70,7 @@ class CurlRequest {
         $time = microtime(true);
         $res['status'] = true;
         $res['request'] = $value['request'] ?? [];
+        $res['curl'] = $value['curl'];
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $value['url']);
         foreach ($value['curl'] as $v) {
